@@ -1,9 +1,9 @@
 ---
 name: second-order-debranges-lehmer-lifting
-description: Scientific knowledge skill for Paper XIII on second-order de Branges-Nevanlinna kernels E_{alpha,beta}(z) = F(z) - i*alpha*F'(z) - beta*F''(z). Contains the exact derivative-Wronskian splitting K_{alpha,beta}(w,w) = (alpha/pi)*W_tilde_{0,1} + (alpha*beta/pi)*W_tilde_{1,2}, canonical Wigner phase-space normalization W_{1,2} = 16 int y sinh(2dy) I^{(1)}(y,t) dy with I^{(1)} = (y^2 + (1/4)*d_t^2) I, radial 4D-Laplace dipole recursion, (1/40)*(ln(t/2pi))^5 diagonal and O(t^{-5/2}) horizon-pair scaling, AND the critical zero-theoretic blind spot on Davenport-Heilbronn (beta_coal = 0.04467500, beta_blind = 0.05349534) motivating the open differential threshold beta*(F).
+description: Scientific knowledge skill for Paper XIII on second-order de Branges-Nevanlinna kernels E_{alpha,beta}(z) = F(z) - i alpha F'(z) - beta F''(z). Contains the exact derivative-Wronskian splitting K_{alpha,beta}(w,w) = (alpha/pi) W_tilde_{0,1} + (alpha beta/pi) W_tilde_{1,2}, canonical Wigner phase-space normalization W_{1,2} = 16 int y sinh(2dy) I^{(1)}(y,t) dy with I^{(1)} = (y^2 + (1/4) d_t^2) I, radial 4D-Laplace dipole recursion, (1/40) (ln(t/2pi))^5 diagonal and O(t^{-5/2}) horizon-pair scaling, and the critical zero-theoretic blind spot on Davenport-Heilbronn (beta_coal = 0.04467500, beta_blind = 0.05349534) motivating the open differential threshold beta_star(F).
 ---
 
-# Second-Order De Branges–Nevanlinna Kernels, Derivative-Wronskian Splitting, Davenport–Heilbronn Blind Spots, and the Differential Threshold $\beta^*$ (Paper XIII)
+# Second-Order De Branges–Nevanlinna Kernels, Derivative-Wronskian Splitting, Davenport–Heilbronn Blind Spots, and the Differential Threshold $\beta^{\ast}$ (Paper XIII)
 
 ## 1. Scope and Critical Zero-Theoretic Guardrails
 
@@ -23,17 +23,23 @@ This skill encapsulates the verified analytical identities, canonical Wigner pha
 
 For any real-entire function $F(z)$, real $\alpha, \beta \in \mathbb{R}$, and $z_1 \neq \bar{z} _ 2$:
 
-$$K _ {\alpha,\beta}(z_1, z_2) := \frac{E _ {\alpha,\beta}(z_1)\overline{E _ {\alpha,\beta}(z_2)} - E _ {\alpha,\beta}^{\sharp}(z_1)\overline{E _ {\alpha,\beta}^{\sharp}(z_2)}}{2\pi\mathrm{i}(z_1 - \bar{z} _ 2)} \equiv \frac{\alpha}{\pi}\frac{F(z_1)\overline{F'(z_2)} - F'(z_1)\overline{F(z_2)}}{z_1 - \bar{z} _ 2} + \frac{\alpha\beta}{\pi}\frac{F'(z_1)\overline{F''(z_2)} - F''(z_1)\overline{F'(z_2)}}{z_1 - \bar{z} _ 2}.$$
+$$
+K _ {\alpha,\beta}(z_1, z_2) := \frac{E _ {\alpha,\beta}(z_1)\overline{E _ {\alpha,\beta}(z_2)} - E _ {\alpha,\beta}^{\sharp}(z_1)\overline{E _ {\alpha,\beta}^{\sharp}(z_2)}}{2\pi\mathrm{i}(z_1 - \bar{z} _ 2)} \equiv \frac{\alpha}{\pi}\frac{F(z_1)\overline{F'(z_2)} - F'(z_1)\overline{F(z_2)}}{z_1 - \bar{z} _ 2} + \frac{\alpha\beta}{\pi}\frac{F'(z_1)\overline{F''(z_2)} - F''(z_1)\overline{F'(z_2)}}{z_1 - \bar{z} _ 2}.
+$$
 
 On the diagonal $w = t - \mathrm{i}d$ ($d \neq 0$):
 
-$$K _ {\alpha,\beta}(t - \mathrm{i}d, t - \mathrm{i}d) \equiv \frac{\alpha}{\pi}\widetilde{W} _ {0,1}(d,t) + \frac{\alpha\beta}{\pi}\widetilde{W} _ {1,2}(d,t), \qquad W _ {k,k+1}(d,t) := \frac{1}{2}\partial_d\left\lvert F^{(k)}(t - \mathrm{i}d)\right\rvert^2, \qquad \widetilde{W} _ {k,k+1}(d,t) := \frac{W _ {k,k+1}(d,t)}{d}.$$
+$$
+K _ {\alpha,\beta}(t - \mathrm{i}d, t - \mathrm{i}d) \equiv \frac{\alpha}{\pi}\widetilde{W} _ {0,1}(d,t) + \frac{\alpha\beta}{\pi}\widetilde{W} _ {1,2}(d,t), \qquad W _ {k,k+1}(d,t) := \frac{1}{2}\partial_d\left\lvert F^{(k)}(t - \mathrm{i}d)\right\rvert^2, \qquad \widetilde{W} _ {k,k+1}(d,t) := \frac{W _ {k,k+1}(d,t)}{d}.
+$$
 
 ### 2.2 Critical-Line Lehmer Lifting at Order $d^0$ (Theorem 3.1)
 
 For $F = \Xi$ as $d \to 0^+$:
 
-$$\pi K _ {\alpha,\beta}(t,t) \equiv \alpha\left(\left(\Xi'(t)\right)^2 - \Xi(t)\Xi''(t)\right) + \alpha\beta\left(\left(\Xi''(t)\right)^2 - \Xi'(t)\Xi'''(t)\right) = \alpha c_1(t) + \alpha\beta c_1^{(1)}(t).$$
+$$
+\pi K _ {\alpha,\beta}(t,t) \equiv \alpha\left(\left(\Xi'(t)\right)^2 - \Xi(t)\Xi''(t)\right) + \alpha\beta\left(\left(\Xi''(t)\right)^2 - \Xi'(t)\Xi'''(t)\right) = \alpha c_1(t) + \alpha\beta c_1^{(1)}(t).
+$$
 
 At an extremum $t _ {\mathrm{mid}}$ ($\Xi'(t _ {\mathrm{mid}}) = 0$) between consecutive simple real zeros $t _ \pm = t _ {\mathrm{mid}} \pm \delta$, $-\Xi'(t _ {\mathrm{mid}})\Xi'''(t _ {\mathrm{mid}}) = 0$ vanishes identically, giving $\pi K _ {\alpha,\beta}(t _ {\mathrm{mid}}, t _ {\mathrm{mid}}) = -\alpha\Xi(t _ {\mathrm{mid}})\Xi''(t _ {\mathrm{mid}}) + \alpha\beta(\Xi''(t _ {\mathrm{mid}}))^2 \ge +\alpha\beta(\Xi''(t _ {\mathrm{mid}}))^2 > 0$.
 
@@ -41,17 +47,23 @@ At an extremum $t _ {\mathrm{mid}}$ ($\Xi'(t _ {\mathrm{mid}}) = 0$) between con
 
 Under the canonical series normalization $\Xi(z) = 8\int_0^{\infty} \Phi(u)\cos(2zu)\mathrm{d}u$ and $I(y,t) = 2\int_0^{\infty} \Phi(\frac{y+r}{2})\Phi(\frac{y-r}{2})\cos(2tr)\mathrm{d}r$:
 
-$$W _ {0,1}(d,t) = 16\int_0^{\infty} y\sinh(2dy)I(y,t)\mathrm{d}y, \qquad W _ {1,2}(d,t) = 16\int_0^{\infty} y\sinh(2dy)I^{(1)}(y,t)\mathrm{d}y, \qquad I^{(1)}(y,t) := \left(y^2 + \frac{1}{4}\partial_t^2\right)I(y,t).$$
+$$
+W _ {0,1}(d,t) = 16\int_0^{\infty} y\sinh(2dy)I(y,t)\mathrm{d}y, \qquad W _ {1,2}(d,t) = 16\int_0^{\infty} y\sinh(2dy)I^{(1)}(y,t)\mathrm{d}y, \qquad I^{(1)}(y,t) := \left(y^2 + \frac{1}{4}\partial_t^2\right)I(y,t).
+$$
 
 The parity-reduced Wronskians satisfy
 
-$$\widetilde{W} _ {1,2}(d,t) \equiv \frac{1}{4}\left(\frac{\partial^2\widetilde{W} _ {0,1}}{\partial d^2} + \frac{2}{d}\frac{\partial\widetilde{W} _ {0,1}}{\partial d} + \frac{\partial^2\widetilde{W} _ {0,1}}{\partial t^2}\right), \qquad c _ {2m-1}^{(1)}(t) \equiv \frac{1}{4}\left(2m(2m+1)c _ {2m+1}(t) + c _ {2m-1}''(t)\right) \qquad (\forall m \ge 1).$$
+$$
+\widetilde{W} _ {1,2}(d,t) \equiv \frac{1}{4}\left(\frac{\partial^2\widetilde{W} _ {0,1}}{\partial d^2} + \frac{2}{d}\frac{\partial\widetilde{W} _ {0,1}}{\partial d} + \frac{\partial^2\widetilde{W} _ {0,1}}{\partial t^2}\right), \qquad c _ {2m-1}^{(1)}(t) \equiv \frac{1}{4}\left(2m(2m+1)c _ {2m+1}(t) + c _ {2m-1}''(t)\right) \qquad (\forall m \ge 1).
+$$
 
 In the Riemann–Siegel main sum up to $N(t) = \lfloor\sqrt{t/2\pi}\rfloor$, the diagonal grows as $\mathcal{D} _ {1,2}(0,t) = 4\sum _ {n=1}^{N(t)} n^{-1}\omega_n(t)^4 \sim \frac{1}{40}(\ln\frac{t}{2\pi})^5$, and the exact $(m,n)$ cross-term $C _ {m,n}^{(1,2)}(t) = \frac{2\omega_m\omega_n}{\sqrt{mn}}[(\omega_m+\omega_n)^2\cos(\phi_m-\phi_n) - (\omega_m-\omega_n)^2\cos(\phi_m+\phi_n)]$ gives $\lvert C _ {N-1,N}^{(1,2)}\rvert = \mathcal{O}(N(t)^{-5}) = \mathcal{O}(t^{-5/2})$ at the horizon pair $(N-1, N)$ (without controlling low-index interior pairs).
 
 ### 2.4 Differential Reality Threshold $\beta^{\star}(F)$ (Definition 5.3)
 
-$$\beta^{\star}(F) := \inf\left\{\beta \in \mathbb{R} : F(z) - \beta F''(z) \text{ has only real zeros}\right\}, \qquad \mathrm{RH} \iff \beta^{\star}(\Xi) \le 0, \qquad \beta^{\star}(\Xi _ {\mathrm{DH}}) = +\infty.$$
+$$
+\beta^{\star}(F) := \inf\left\lbrace\beta \in \mathbb{R} : F(z) - \beta F''(z) \text{ has only real zeros}\right\rbrace, \qquad \mathrm{RH} \iff \beta^{\star}(\Xi) \le 0, \qquad \beta^{\star}(\Xi _ {\mathrm{DH}}) = +\infty.
+$$
 
 ## 3. Reproducible Verification Workflow
 
