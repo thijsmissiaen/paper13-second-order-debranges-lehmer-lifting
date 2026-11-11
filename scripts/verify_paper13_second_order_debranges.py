@@ -2,37 +2,35 @@
 """
 Standalone Verification & Figure Generation Suite for Paper XIII
 ================================================================
-Title: Second-Order Hermite-Biehler De Branges Kernels, the Derivative-Wronskian
-       Splitting K_{alpha,beta} = (alpha/pi)*W_tilde_{0,1} + (alpha*beta/pi)*W_tilde_{1,2},
-       and d = 0 Lifting of the Lehmer Near-Coalescence Degeneracy for Riemann's Xi-Function
+Title: Second-Order De Branges--Nevanlinna Kernels, Derivative-Wronskian Splitting,
+       Davenport--Heilbronn Off-Line Blind Spots, and the Differential Threshold beta*
 Author: Thijs Missiaen (Independent Researcher, Belgium; ORCID: 0009-0007-3678-0810)
 
-This script executes four self-contained verification modules and generates the two
+This script executes five self-contained verification modules and generates the two
 publication-grade 300-DPI multi-panel figures:
-  1. [Section 2] 60-decimal mpmath verification of the exact second-order de Branges
-     reproducing kernel identity K_{alpha,beta}(t - i*d, t - i*d) == (alpha/pi)*W_tilde_{0,1}(d,t)
+  1. [Section 2] 60-decimal mpmath verification of the exact second-order Hermitian
+     kernel identity K_{alpha,beta}(t - i*d, t - i*d) == (alpha/pi)*W_tilde_{0,1}(d,t)
      + (alpha*beta/pi)*W_tilde_{1,2}(d,t), exact cancellation of all three quadratic norms
      (|Xi|^2, alpha^2*|Xi'|^2, beta^2*|Xi''|^2) and the (0,2) cross-term -2*beta*Re(conj(Xi)*Xi''),
      and off-diagonal 6x6 Cauchy-Pick Gram matrix splitting G_{alpha,beta} == alpha*G^{(0,1)}
      + alpha*beta*G^{(1,2)}.
   2. [Section 3] 60-decimal mpmath and 35-decimal directed-rounding interval (mpmath.iv)
-     certification of the critical-linesquare-interlocking hierarchy across the first ten
+     certification of the critical-line square-interlocking hierarchy across the first ten
      Riemann zeros gamma_k, critical-line extrema tau_k (Xi'(tau_k) = 0), and inflection
      points nu_k (Xi''(nu_k) = 0), together with a 550-decimal (mp.workdps(550)) Lehmer
-     pair deformation down to Delta_gamma = 2*delta = 10^{-250} certifying that the
-     d = 0 kernel pi*K_{alpha,beta}(t_mid, t_mid) = -alpha*Xi(t_mid)*Xi''(t_mid)
-     + alpha*beta*(Xi''(t_mid))^2 remains strictly bounded below by +alpha*beta*(Xi''(t_0))^2 > 0
-     at order d^0 on the critical line itself.
+     pair deformation down to Delta_gamma = 2*delta = 10^{-250}.
   3. [Section 4] 60-decimal verification of the exact radial 4D-Laplace PDE coupling
-     W_tilde_{1,2} == (1/4)*(d_d^2 + (2/d)*d_d + d_t^2)*W_tilde_{0,1}, the universal dipole
-     recursion c_{2m-1}^{(1)}(t) == (1/4)*(2m(2m+1)*c_{2m+1}(t) + c_{2m-1}''(t)), the Wigner
-     phase-space representation I^{(1)}(y,t) = (1/4)*(y^2 + d_t^2)*I(y,t), the quartic
-     O(N(t)^{-5}) = O(t^{-5/2}) self-damping of the slowest boundary pair (N-1, N) up to
-     t = 10^8, and the universal order-M Hurwitz chain coalescence law
-     pi*K_alpha(t_0, t_0) = +alpha_{m-1}*alpha_m*(Xi^{(m)}(t_0))^2 > 0 for m = 1, 2, 3, 4.
-  4. [Section 5] Vectorized GPU/CPU continuum sweep of K_{alpha,beta}(t - i*d, t - i*d)
-     across 2,000,000 points on [0, 0.50] x [14, 1000] and 1,002,000-cell Gabcke-Olver
-     prime-gauge closure for the combined second-order kernel.
+     W_tilde_{1,2} == (1/4)*(d_d^2 + (2/d)*d_d + d_t^2)*W_tilde_{0,1}, canonical Wigner
+     phase-space representation W_{1,2}(d,t) = 16 int_0^infty y sinh(2dy) I^{(1)}(y,t) dy
+     with I^{(1)}(y,t) = (y^2 + (1/4)d_t^2)I(y,t), diagonal (1/40)*(ln(t/2pi))^5 and
+     O(N(t)^{-5}) = O(t^{-5/2}) boundary pair (N-1, N) scaling up to t = 10^8, and the
+     order-M Hurwitz chain coalescence identity.
+  4. [Section 5] 60-decimal Davenport-Heilbronn blind-spot verification proving that
+     pi*K_{alpha,beta}^{DH}(tau_false, tau_false) > 0 for all beta > 0.0534953385 (including
+     beta = 1/4), pi*K_{alpha,beta}^{DH}(z_*, z_*) > 0 right at the off-line zero z_* for
+     all beta > 0, and exact real-axis zero coalescence at beta_coal^{(1)} = 0.0446750013.
+  5. [Appendix] Vectorized 100,000-point grid evaluation of K_{1,1/4}(t - i*d, t - i*d)
+     on [0.002, 0.50] x [12, 52] and generation of Figures 1 and 2.
 """
 
 from __future__ import annotations
@@ -201,7 +199,7 @@ def run_module1_second_order_debranges(gammas: List[mp.mpf], taus: List[mp.mpf],
     print("=" * 88)
 
     alpha = mp.mpf("1.0")
-    beta = mp.mpf("0.25")  # Canonical Lagarias-Ki-Suzuki quadratic parameter beta = alpha^2 / 4
+    beta = mp.mpf("0.25")  # Repeated-root parameter beta = alpha^2 / 4: E_{alpha, alpha^2/4} = (1 - i*(alpha/2)*d_z)^2 F
 
     # Cross-check Mellin-Jacobi quadrature against exact Gamma*Zeta formula at (0.15, gamma_1)
     w_chk = gammas[0] - 1j * mp.mpf("0.15")
@@ -573,8 +571,54 @@ def run_module3_laplace_wigner_and_hurwitz(
         )
         assert pi_K_wronsk > 0 and err_m < mp.mpf("1e-58")
 
-    # 3D. Quartic O(N(t)^{-5}) = O(t^{-5/2}) self-damping of slowest boundary pair (N-1, N) up to t = 10^8
-    print("\n  [Table 3C: Quartic Boundary Self-Damping of Slowest Mode Pair (N-1, N) in W_hat_{1,2} vs W_hat_{0,1}]")
+    # 3D. Canonical Wigner phase-space check W_{0,1} = 16 int y sinh(2dy) I(y,t) dy
+    # and W_{1,2} = 16 int y sinh(2dy) I^{(1)}(y,t) dy where I^{(1)}(y,t) = (y^2 + (1/4)d_t^2)I(y,t)
+    N_wig = 200
+    dy_wig = mp.mpf("2.8") / N_wig
+    dr_wig = mp.mpf("2.8") / N_wig
+
+    def _phi_eval(u_val: mp.mpf) -> mp.mpf:
+        u_abs = abs(u_val)
+        if u_abs > mp.mpf("2.3"):
+            return mp.mpf("0")
+        e4 = mp.exp(4 * u_abs)
+        e5 = mp.exp(5 * u_abs)
+        e9 = mp.exp(9 * u_abs)
+        acc = mp.mpf("0")
+        for m in range(1, 16):
+            m2 = mp.mpf(m * m)
+            arg = mp.pi * m2 * e4
+            if arg > 180:
+                break
+            acc += (2 * (mp.pi ** 2) * (m2 ** 2) * e9 - 3 * mp.pi * m2 * e5) * mp.exp(-arg)
+        return acc
+
+    W01_wig_sum = mp.mpf("0")
+    W12_wig_sum = mp.mpf("0")
+    for ky in range(1, N_wig):
+        yv = ky * dy_wig
+        I0_acc = mp.mpf("0.5") * (_phi_eval(yv / 2) ** 2)
+        I1_acc = mp.mpf("0.5") * (yv ** 2) * (_phi_eval(yv / 2) ** 2)
+        for kr in range(1, N_wig):
+            rv = kr * dr_wig
+            prod_phi = _phi_eval((yv + rv) / 2) * _phi_eval((yv - rv) / 2) * mp.cos(2 * t_pde * rv)
+            I0_acc += prod_phi
+            I1_acc += (yv ** 2 - rv ** 2) * prod_phi
+        I0_yv = 2 * I0_acc * dr_wig
+        I1_yv = 2 * I1_acc * dr_wig
+        sh_fac = yv * mp.sinh(2 * d_pde * yv)
+        W01_wig_sum += sh_fac * I0_yv
+        W12_wig_sum += sh_fac * I1_yv
+    W01_wig = 16 * dy_wig * W01_wig_sum
+    W12_wig = 16 * dy_wig * W12_wig_sum
+    wig01_err = abs(W01_wig - d_pde * W01_val) / abs(d_pde * W01_val)
+    wig12_err = abs(W12_wig - d_pde * W12_exact) / abs(d_pde * W12_exact)
+    print(f"  - Canonical Wigner W_{{0,1}} = 16 int y sinh(2dy) I(y,t) dy rel. err : {mp.nstr(wig01_err, 4)}")
+    print(f"  - Canonical Wigner W_{{1,2}} = 16 int y sinh(2dy) I^(1)(y,t) dy err  : {mp.nstr(wig12_err, 4)}")
+    assert wig01_err < mp.mpf("1e-25") and wig12_err < mp.mpf("1e-25")
+
+    # 3E. Exact O(N(t)^{-5}) = O(t^{-5/2}) amplitude of slowest boundary pair (N-1, N) up to t = 10^8
+    print("\n  [Table 3C: Diagonal (1/40)L^5 Growth & Boundary Pair (N-1, N) Amplitude in W_hat_{1,2} vs W_hat_{0,1}]")
     hdr_b = (
         f"  {'Height t':>12} | {'N(t)':>8} | {'W_hat_{0,1,diag}(0,t)':>22} | "
         f"{'W_hat_{1,2,diag}(0,t)':>22} | {'|C_{N-1,N}^{(0,1)}|/D_{0,1}':>22} | {'|C_{N-1,N}^{(1,2)}|/D_{1,2}':>22}"
@@ -584,7 +628,7 @@ def run_module3_laplace_wigner_and_hurwitz(
 
     boundary_rows = []
     for t_val_f in [1e3, 1e4, 1e5, 1e6, 1e7, 1e8]:
-        N_t = int(math.isqrt(int(t_val_f / (2.0 * math.pi))))
+        N_t = int(math.floor(math.sqrt(t_val_f / (2.0 * math.pi))))
         # Asymptotic theta'(t) = (1/2) ln(t / 2pi)
         theta_p = 0.5 * math.log(t_val_f / (2.0 * math.pi))
         ns = np.arange(1, N_t + 1, dtype=np.float64)
@@ -594,8 +638,11 @@ def run_module3_laplace_wigner_and_hurwitz(
         w_Nm1 = float(theta_p - math.log(N_t - 1))
         w_N = float(theta_p - math.log(N_t))
         amp_base = 2.0 / math.sqrt((N_t - 1) * N_t)
-        C01_max = amp_base * ((w_Nm1 + w_N) ** 2) * w_Nm1 * w_N
-        C12_max = amp_base * ((w_Nm1 + w_N) ** 2) * ((w_Nm1 * w_N) ** 2)
+        # Exact slow-phase cos(phi_{N-1} - phi_N) coefficients from SymPy derivation:
+        # C_{m,n}^{(0,1),slow} = (2/sqrt(mn)) * (w_m + w_n)^2  [O(N^{-3}) = O(t^{-3/2})]
+        # C_{m,n}^{(1,2),slow} = (2*w_m*w_n/sqrt(mn)) * (w_m + w_n)^2  [O(N^{-5}) = O(t^{-5/2})]
+        C01_max = amp_base * ((w_Nm1 + w_N) ** 2)
+        C12_max = amp_base * ((w_Nm1 + w_N) ** 2) * (w_Nm1 * w_N)
         rat_01 = C01_max / D01
         rat_12 = C12_max / D12
         print(
@@ -788,7 +835,7 @@ def run_module4_continuum_and_figures(
             color=col_g,
             label=rf"$d = {d0_gram:.2f}$ ($\lambda_{{\min}}(\widehat{{\mathbf{{G}}}}_{{1,\beta}})/\lambda_{{\min}}(\widehat{{\mathbf{{G}}}}^{{(0,1)}})$)",
         )
-    ax.set_xlabel(r"Second-order Hermite--Biehler parameter $\beta$")
+    ax.set_xlabel(r"Second-order coupling parameter $\beta$")
     ax.set_ylabel(r"Spectral gap ratio $\lambda_{\min}(\widehat{\mathbf{G}}_{1,\beta}) / \lambda_{\min}(\widehat{\mathbf{G}}^{(0,1)})$")
     ax.set_title(r"(d) Monotonic Loewner Enhancement $\mathbf{G}_{\alpha,\beta} = \alpha\mathbf{G}^{(0,1)} + \alpha\beta\mathbf{G}^{(1,2)}$")
     ax.legend(loc="upper left", fontsize=8.0, framealpha=0.92)
@@ -806,45 +853,45 @@ def run_module4_continuum_and_figures(
     # -------------------------------------------------------------------------
     fig2, axes2 = plt.subplots(2, 2, figsize=(12.2, 8.8), dpi=300)
 
-    # Panel (a): Wigner phase-space integrand y^2 I(y, gamma_1) vs y^2 I^{(1)}(y, gamma_1)
+    # Panel (a): Canonical Wigner phase-space integrand y^2 I(y, gamma_1) vs y^2 I^{(1)}(y, gamma_1)
     ax = axes2[0, 0]
-    y_vals = np.linspace(0.02, 1.50, 90)
-    x_quad = np.linspace(-2.2, 2.2, 161)
-    dx_q = x_quad[1] - x_quad[0]
+    y_vals = np.linspace(0.01, 0.85, 90)
+    r_quad = np.linspace(0.0, 1.8, 181)
+    dr_q = r_quad[1] - r_quad[0]
 
-    def phi_tilde_np(w_arr: np.ndarray) -> np.ndarray:
-        u_half = 0.5 * w_arr
-        e4 = np.exp(4.0 * u_half)
-        e5 = np.exp(5.0 * u_half)
-        e9 = np.exp(9.0 * u_half)
-        out = np.zeros_like(w_arr, dtype=np.float64)
+    def phi_canon_np(u_arr: np.ndarray) -> np.ndarray:
+        u_abs = np.abs(u_arr)
+        e4 = np.exp(4.0 * u_abs)
+        e5 = np.exp(5.0 * u_abs)
+        e9 = np.exp(9.0 * u_abs)
+        out = np.zeros_like(u_abs, dtype=np.float64)
         for m in range(1, 10):
             m2 = float(m * m)
             m4 = m2 * m2
-            out += 2.0 * ( (2.0 * (np.pi ** 2) * m4 * e9 - 3.0 * np.pi * m2 * e5) * np.exp(-np.pi * m2 * e4) )
+            out += (2.0 * (np.pi ** 2) * m4 * e9 - 3.0 * np.pi * m2 * e5) * np.exp(-np.pi * m2 * e4)
         return out
 
     g1_f = float(gammas[0])
     I0_y = []
     I1_y = []
+    trapz_fn = getattr(np, "trapezoid", getattr(np, "trapz", None))
     for yv in y_vals:
-        p_plus = phi_tilde_np(0.5 * (x_quad + yv))
-        p_minus = phi_tilde_np(0.5 * (x_quad - yv))
+        p_plus = phi_canon_np(0.5 * (yv + r_quad))
+        p_minus = phi_canon_np(0.5 * (yv - r_quad))
         prod = p_plus * p_minus
-        cs_x = np.cos(g1_f * x_quad)
-        trapz_fn = getattr(np, "trapezoid", getattr(np, "trapz", None))
-        I0_val = float(trapz_fn(prod * cs_x, dx=dx_q))
-        I1_val = float(trapz_fn(0.25 * (yv ** 2 - x_quad ** 2) * prod * cs_x, dx=dx_q))
-        I0_y.append((yv ** 2) * I0_val)
-        I1_y.append((yv ** 2) * I1_val)
+        cs_r = np.cos(2.0 * g1_f * r_quad)
+        I0_val = 2.0 * float(trapz_fn(prod * cs_r, dx=dr_q))
+        I1_val = 2.0 * float(trapz_fn((yv ** 2 - r_quad ** 2) * prod * cs_r, dx=dr_q))
+        I0_y.append(32.0 * (yv ** 2) * I0_val)
+        I1_y.append(32.0 * (yv ** 2) * I1_val)
 
-    ax.plot(y_vals, I0_y, color="#1f77b4", linewidth=1.6, label=r"$y^2 I(y, \gamma_1)$ ($\widetilde{W}_{0,1}$ kernel)")
-    ax.plot(y_vals, I1_y, color="#d62728", linewidth=1.6, label=r"$y^2 I^{(1)}(y, \gamma_1) = \frac{1}{4}y^2(y^2+\partial_t^2)I(y,\gamma_1)$")
+    ax.plot(y_vals, I0_y, color="#1f77b4", linewidth=1.6, label=r"$32 y^2 I(y, \gamma_1)$ ($\widetilde{W}_{0,1}$ kernel)")
+    ax.plot(y_vals, I1_y, color="#d62728", linewidth=1.6, label=r"$32 y^2 I^{(1)}(y, \gamma_1) = 32 y^2(y^2+\frac{1}{4}\partial_t^2)I(y,\gamma_1)$")
     ax.axhline(0.0, color="black", linewidth=0.7, alpha=0.6)
-    ax.set_xlabel(r"Logarithmic phase-space shift $y$")
+    ax.set_xlabel(r"Canonical phase-space shift $y$")
     ax.set_ylabel(r"Weighted Wigner moment kernel at $t = \gamma_1$")
-    ax.set_title(r"(a) Wigner Kernel $y^2 I^{(1)}(y,t) = \frac{1}{4}y^2(y^2+\partial_t^2)I(y,t)$")
-    ax.legend(loc="upper right", fontsize=8.0, framealpha=0.92)
+    ax.set_title(r"(a) Canonical Wigner Kernel $I^{(1)}(y,t) = (y^2+\frac{1}{4}\partial_t^2)I(y,t)$")
+    ax.legend(loc="upper right", fontsize=7.8, framealpha=0.92)
     ax.grid(True, linestyle=":", alpha=0.4)
 
     # Panel (b): Exact match between c_1^{(1)}(t) and Laplace recursion (3/2)c_3(t) + (1/4)c_1''(t)
@@ -910,6 +957,91 @@ def run_module4_continuum_and_figures(
     assert size1_kb < 500.0 and size2_kb < 500.0
 
 
+def run_module5_davenport_heilbronn_blind_spot() -> dict:
+    print("\n" + "=" * 88)
+    print("MODULE 5: DAVENPORT-HEILBRONN OFF-LINE BLIND SPOT & COALESCENCE THRESHOLD (THEOREM 5.1)")
+    print("=" * 88)
+
+    kappa = (mp.sqrt(10 - 2 * mp.sqrt(5)) - 2) / (mp.sqrt(5) - 1)
+
+    def chi5(n: int) -> mp.mpc:
+        r = n % 5
+        if r == 0:
+            return mp.mpc(0)
+        if r == 1:
+            return mp.mpc(1)
+        if r == 2:
+            return mp.mpc(0, 1)
+        if r == 3:
+            return mp.mpc(0, -1)
+        return mp.mpc(-1)
+
+    def Xi_DH(z: mp.mpc) -> mp.mpc:
+        s = mp.mpf("0.5") + 1j * z
+        L1 = (mp.mpf(5) ** (-s)) * sum(chi5(a) * mp.hurwitz(s, mp.mpf(a) / 5) for a in range(1, 5))
+        L2 = (mp.mpf(5) ** (-s)) * sum(mp.conj(chi5(a)) * mp.hurwitz(s, mp.mpf(a) / 5) for a in range(1, 5))
+        D_val = ((1 - 1j * kappa) / 2) * L1 + ((1 + 1j * kappa) / 2) * L2
+        return ((mp.pi / 5) ** (-(s + 1) / 2)) * mp.gamma((s + 1) / 2) * D_val
+
+    z_star = mp.findroot(Xi_DH, mp.mpc("85.6993484854", "-0.3085171825"))
+    gamma_star = mp.re(z_star)
+    d_star = -mp.im(z_star)
+    tau_false = mp.findroot(lambda t: mp.re(mp.diff(Xi_DH, t)), mp.mpf("85.7472008265"))
+
+    X0_tf = mp.re(Xi_DH(tau_false))
+    X2_tf = mp.re(mp.diff(Xi_DH, tau_false, 2))
+    c1_tf = -X0_tf * X2_tf
+    c1_1_tf = X2_tf ** 2
+    beta_blind = -c1_tf / c1_1_tf
+    tau_chi5 = sum(chi5(a) * mp.exp(2j * mp.pi * mp.mpf(a) / 5) for a in range(1, 5))
+    tau_chi5_exact = -mp.sqrt((5 - mp.sqrt(5)) / 2) + 1j * mp.sqrt((5 + mp.sqrt(5)) / 2)
+    assert abs(tau_chi5 - tau_chi5_exact) < mp.mpf("1e-58")
+    assert abs(tau_chi5_exact / (1j * mp.sqrt(5)) - (1 + 1j * kappa) / (1 - 1j * kappa)) < mp.mpf("1e-58")
+    assert X0_tf < 0 and X2_tf < 0 and abs(beta_blind - (X0_tf / X2_tf)) < mp.mpf("1e-58")
+
+    # Evaluate K_{1, beta}^{DH} at the off-line zero z_* = gamma_* - i*d_* itself:
+    X1_zs = mp.diff(Xi_DH, z_star, 1)
+    X2_zs = mp.diff(Xi_DH, z_star, 2)
+    W01_zs = mp.mpf("0")
+    W12_zs = mp.im(mp.conj(X1_zs) * X2_zs) / d_star
+
+    # Exact coalescence beta where the first off-line zero pair of Xi_DH - beta*Xi_DH'' hits R:
+    t_coal = mp.findroot(
+        lambda t: mp.re(Xi_DH(t) * mp.diff(Xi_DH, t, 3) - mp.diff(Xi_DH, t, 1) * mp.diff(Xi_DH, t, 2)),
+        mp.mpf("85.62915"),
+    )
+    beta_coal = mp.re(Xi_DH(t_coal) / mp.diff(Xi_DH, t_coal, 2))
+
+    print(f"  - First DH off-line zero z_* = gamma_* - i*d_* : {mp.nstr(gamma_star, 16)} - {mp.nstr(d_star, 16)}i")
+    print(f"  - Critical-line defect point tau_false         : {mp.nstr(tau_false, 16)}")
+    print(f"  - c_1^DH(tau_false)                            : {mp.nstr(c1_tf, 12)} (< 0)")
+    print(f"  - c_1^(1),DH(tau_false) = (Xi_DH'')^2          : {mp.nstr(c1_1_tf, 12)} (> 0)")
+    print(f"  - Blind-spot threshold beta_blind(tau_false)   : {mp.nstr(beta_blind, 14)}")
+    print(f"  - Coalescence threshold beta_coal^(1)          : {mp.nstr(beta_coal, 14)} at t_coal = {mp.nstr(t_coal, 14)}")
+    print(f"  - W_tilde_{{1,2}}^DH(d_*, gamma_*) at z_*       : {mp.nstr(W12_zs, 12)} (> 0)")
+
+    print("\n  [Table 5: Second-Order Kernel Blind Spot Across beta on Davenport-Heilbronn]")
+    print(f"  {'beta':>10} | {'pi*K^DH(tau_false, tau_false)':>30} | {'pi*K^DH(z_*, z_*) at zero':>28} | {'Status near t=85.7':<24}")
+    print("  " + "-" * 100)
+    for b_test in [mp.mpf("0"), mp.mpf("0.02"), mp.mpf("0.0446750013"), mp.mpf("0.05"), beta_blind, mp.mpf("0.10"), mp.mpf("0.25")]:
+        piK_tf = c1_tf + b_test * c1_1_tf
+        piK_zs = W01_zs + b_test * W12_zs
+        status = "Detects (< 0)" if piK_tf < -mp.mpf("1e-70") else ("Threshold (= 0)" if abs(piK_tf) <= mp.mpf("1e-70") else "BLIND (> 0)")
+        print(f"  {float(b_test):10.6f} | {mp.nstr(piK_tf, 12):>30} | {mp.nstr(piK_zs, 12):>28} | {status:<24}")
+
+    assert c1_tf < 0 and c1_1_tf > 0
+    assert mp.mpf("0.0534") < beta_blind < mp.mpf("0.0536")
+    assert mp.mpf("0.0446") < beta_coal < mp.mpf("0.0447")
+    assert (c1_tf + mp.mpf("0.25") * c1_1_tf) > 0
+    assert W12_zs > 0
+    return {
+        "beta_blind": beta_blind,
+        "beta_coal": beta_coal,
+        "t_coal": t_coal,
+        "W12_zs": W12_zs,
+    }
+
+
 def main() -> int:
     t_start = time.time()
     print("Initializing 60-decimal critical-line zeros gamma_k, extrema tau_k, and inflections nu_k...")
@@ -920,6 +1052,7 @@ def main() -> int:
     mod1 = run_module1_second_order_debranges(gammas, taus, nus)
     mod2 = run_module2_lehmer_lifting_and_interlocking(gammas, taus, nus)
     mod3 = run_module3_laplace_wigner_and_hurwitz(gammas, taus, nus)
+    mod5 = run_module5_davenport_heilbronn_blind_spot()
     run_module4_continuum_and_figures(gammas, taus, nus, mod2, mod3)
 
     elapsed = time.time() - t_start

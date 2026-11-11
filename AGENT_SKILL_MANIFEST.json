@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "name": "second-order-debranges-lehmer-lifting",
-  "title": "Second-Order Hermite-Biehler De Branges Kernels, the Derivative-Wronskian Splitting K_{alpha,beta} == (alpha/pi)*W_tilde_{0,1} + (alpha*beta/pi)*W_tilde_{1,2}, and d = 0 Lifting of the Lehmer Near-Coalescence Degeneracy for Riemann's Xi-Function",
-  "version": "1.0.0",
+  "title": "Second-Order De Branges-Nevanlinna Kernels, Derivative-Wronskian Splitting, Davenport-Heilbronn Blind Spots, and the Differential Threshold beta*",
+  "version": "1.1.0",
   "author": {
     "name": "Thijs Missiaen",
     "affiliation": "Independent Researcher, Belgium",
@@ -18,17 +18,17 @@
     "manuscript_pdf": "paper/paper13_second_order_debranges.pdf",
     "verification_script": "scripts/verify_paper13_second_order_debranges.py",
     "figures": [
-      "paper/figures/fig1_second_order_debranges_and_lehmer_lifting.png",
-      "paper/figures/fig2_laplace_wigner_dipole_and_hurwitz_chains.png"
+      "paper/figures/fig1_second_order_debranges_and_lehmer_lifting.pdf",
+      "paper/figures/fig2_laplace_wigner_dipole_and_hurwitz_chains.pdf"
     ]
   },
   "core_theorems": [
-    "Theorem 1.1: Exact Second-Order De Branges Kernel Splitting, Critical-Line Lehmer Lifting at Order d^0, Radial 4D-Laplace Dipole Recursion, and Universal Order-M Hurwitz Coalescence Law",
-    "Theorem 2.1: Exact Cross-Term-Free Second-Order De Branges Reproducing Kernel Identity K_{alpha,beta}(t-id, t-id) == (alpha/pi)*W_tilde_{0,1}(d,t) + (alpha*beta/pi)*W_tilde_{1,2}(d,t)",
-    "Proposition 2.2: Off-Diagonal Cauchy-Pick Gram Matrix Splitting G_{alpha,beta} == alpha*G^{(0,1)} + alpha*beta*G^{(1,2)} and Uniqueness of Degree M = 2",
-    "Theorem 3.1: Lifting the d = 0 Lehmer Near-Coalescence Degeneracy at Order d^0 and Global Topological Square Interlocking across gamma_k, tau_k, and nu_k",
-    "Theorem 4.1: The Radial 4D-Laplace PDE Coupling, Universal Dipole Recursion c_{2m-1}^{(1)}(t) == (1/4)*(2m(2m+1)*c_{2m+1}(t) + c_{2m-1}''(t)), Wigner Operator I^{(1)}(y,t), and Quartic Boundary Self-Damping",
-    "Theorem 4.2: General Order-M Hurwitz-De Branges Chains E_alpha(z) = P_M(-i*d_z)Xi(z) and the Universal d = 0 Coalescence Law pi*K_alpha(t_0, t_0) = +alpha_{m-1}*alpha_m*(Xi^{(m)}(t_0))^2 > 0"
+    "Theorem 2.1: Second-Order De Branges-Nevanlinna Kernel Splitting K_{alpha,beta}(t-id, t-id) == (alpha/pi)*W_tilde_{0,1}(d,t) + (alpha*beta/pi)*W_tilde_{1,2}(d,t)",
+    "Proposition 2.2: Off-Diagonal Cauchy-Pick Matrix Splitting G_{alpha,beta} == alpha*G^{(0,1)} + alpha*beta*G^{(1,2)} and Uniqueness of Degree Two",
+    "Theorem 3.1: Critical-Line Lehmer Lifting at Order d^0 and Square Interlocking across gamma_k, tau_k, and nu_k",
+    "Theorem 4.1: Radial 4D-Laplace PDE, Canonical Wigner Operator I^{(1)}(y,t) = (y^2 + (1/4)*d_t^2)*I(y,t), (1/40)*(ln(t/2pi))^5 Diagonal, and O(t^{-5/2}) Horizon-Pair Scaling",
+    "Theorem 4.2: General Order-M Hurwitz Chains E_alpha(z) = P_M(-i*d_z)F(z) and Multiplicity-m Coalescence Law",
+    "Theorem 5.1: Davenport-Heilbronn Off-Line Blind Spot (beta_blind = 0.05349534, beta_coal = 0.04467500) and Differential Reality Threshold beta*(F) (beta*(Xi_DH) = +infinity)"
   ],
   "verification_command": "python scripts/verify_paper13_second_order_debranges.py"
 }
