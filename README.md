@@ -1,5 +1,6 @@
 # Second-Order De Branges–Nevanlinna Kernels, Derivative-Wronskian Splitting, Davenport–Heilbronn Blind Spots, and the Differential Threshold $\beta^*$
 
+**DOI (Zenodo / CERN):** [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24141093.svg)](https://doi.org/10.5281/zenodo.24141093) [`10.5281/zenodo.24141093`](https://doi.org/10.5281/zenodo.24141093) (v13.1.0: [`10.5281/zenodo.24141094`](https://doi.org/10.5281/zenodo.24141094))  
 **Author:** Thijs Missiaen (Independent Researcher, Belgium; [thijs.missiaen@gmail.com](mailto:thijs.missiaen@gmail.com); ORCID: [0009-0007-3678-0810](https://orcid.org/0009-0007-3678-0810))  
 **Series:** Paper XIII of the Transverse Wronskian Series on Riemann's $\Xi$-Function  
 **Manuscript:** [paper/paper13_second_order_debranges.pdf](paper/paper13_second_order_debranges.pdf) (16 pages, AMS-LaTeX / pdfTeX) | [paper/paper13_second_order_debranges.tex](paper/paper13_second_order_debranges.tex)  
