@@ -7,7 +7,7 @@ authors:
     email: "thijs.missiaen@gmail.com"
     orcid: "https://orcid.org/0009-0007-3678-0810"
 title: "Second-Order De Branges-Nevanlinna Kernels, Derivative-Wronskian Splitting, Davenport-Heilbronn Blind Spots, and the Differential Threshold beta*"
-version: "1.1.0"
+version: "13.1.0"
 date-released: "2026-11-11"
 url: "https://github.com/thijsmissiaen/paper13-second-order-debranges-lehmer-lifting"
 repository-code: "https://github.com/thijsmissiaen/paper13-second-order-debranges-lehmer-lifting"
